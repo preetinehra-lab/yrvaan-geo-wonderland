@@ -63,14 +63,14 @@ function Index() {
 
         <div className="relative border-t border-primary-foreground/10 bg-primary/80 backdrop-blur">
           <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-primary-foreground/10 md:grid-cols-4">
-            {services.map((s) => (
+            {services.map((s, i) => (
               <Link
                 key={s.slug}
                 to="/services"
                 hash={s.slug}
                 className="group px-6 py-6 transition-colors hover:bg-accent/10"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">0{services.indexOf(s as never) + 1}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">0{i + 1}</p>
                 <p className="mt-2 font-display text-base font-bold leading-tight text-primary-foreground group-hover:text-accent">
                   {s.title}
                 </p>
