@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { site } from "@/lib/site";
+import logo from "@/assets/logo.jpeg";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -16,7 +17,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="inline-block h-7 w-7 bg-accent" aria-hidden />
+          <img src={logo} alt="YRVAAN GeoSystems logo" className="h-9 w-9 object-contain" />
           <span className="font-display text-lg font-extrabold tracking-tight text-primary">
             YRVAAN<span className="text-accent">.</span>
           </span>
