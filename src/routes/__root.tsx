@@ -80,6 +80,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "YRVAAN GeoSystems" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "YRVAAN GeoSystems — Earth Retention & Substructure Specialists" },
+      { name: "twitter:title", content: "YRVAAN GeoSystems — Earth Retention & Substructure Specialists" },
+      { property: "og:description", content: "YRVAAN GeoSystems Pvt Ltd: soldier pile walls, diaphragm walls, shotcreting, and engineered retention systems." },
+      { name: "twitter:description", content: "YRVAAN GeoSystems Pvt Ltd: soldier pile walls, diaphragm walls, shotcreting, and engineered retention systems." },
     ],
     links: [
       {
