@@ -5,7 +5,7 @@ export const site = {
   domain: "yrvaangeo.com",
   url: "https://yrvaangeo.com",
   email: "projects@yrvaangeo.com",
-  phone: "+91 00000 00000",
+  phone: "+91-8796506261",
   address: "Plot no. 1, opp. Hafed Godown, Jhajjar - Gwalison Road, V.P.O talao, Jhajjar -124103",
   hours: "Mon – Sat · 9:00 AM – 6:00 PM",
 };
