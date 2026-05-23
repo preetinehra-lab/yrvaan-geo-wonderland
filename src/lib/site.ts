@@ -4,9 +4,9 @@ export const site = {
   tagline: "Engineered earth retention & substructure works",
   domain: "yrvaangeo.com",
   url: "https://yrvaangeo.com",
-  email: "info@yrvaangeo.com",
+  email: "projects@yrvaangeo.com",
   phone: "+91 00000 00000",
-  address: "Address coming soon — please update in src/lib/site.ts",
+  address: "Plot no. 1, opp. Hafed Godown, Jhajjar - Gwalison Road, V.P.O talao, Jhajjar -124103",
   hours: "Mon – Sat · 9:00 AM – 6:00 PM",
 };
 
