@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, Phone, MapPin, Clock, Send, Check } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, Check, Loader2 } from "lucide-react";
 import { site, services } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
@@ -18,20 +18,42 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (status === "submitting") return;
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const params = new URLSearchParams();
-    data.forEach((v, k) => params.append(k, String(v)));
-    // Fallback: open user's mail client with the message prefilled.
-    const subject = `Quote request — ${data.get("service") ?? "General"}`;
-    const body = `Name: ${data.get("name")}\nPhone: ${data.get("phone")}\nEmail: ${data.get("email")}\nLocation: ${data.get("location")}\nService: ${data.get("service")}\n\n${data.get("message")}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
-    form.reset();
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") ?? "").trim(),
+      company: String(fd.get("company") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      phone: String(fd.get("phone") ?? "").trim(),
+      location: String(fd.get("location") ?? "").trim(),
+      service: String(fd.get("service") ?? "").trim(),
+      message: String(fd.get("message") ?? "").trim(),
+    };
+
+    setStatus("submitting");
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.error || "Submission failed");
+      }
+      setStatus("success");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
+    }
   }
 
   return (
@@ -51,6 +73,29 @@ function ContactPage() {
 
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-[3fr_2fr]">
         {/* FORM */}
+        {status === "success" ? (
+          <div className="border border-border bg-background p-8 md:p-10">
+            <div className="flex items-start gap-4">
+              <span className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
+                <Check size={20} />
+              </span>
+              <div>
+                <h2 className="font-display text-2xl font-bold text-primary">Request submitted</h2>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Thanks for reaching out. Our team has received your request and will respond within
+                  one working day at the email and phone number you provided.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className="mt-6 inline-flex h-11 items-center gap-2 border border-border px-5 text-xs font-semibold uppercase tracking-wider text-primary hover:bg-secondary"
+                >
+                  Send another request
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
         <form onSubmit={onSubmit} className="border border-border bg-background p-8 md:p-10">
           <h2 className="font-display text-2xl font-bold text-primary">Request a Quote</h2>
           <p className="mt-1 text-sm text-muted-foreground">All fields marked * are required.</p>
@@ -94,17 +139,23 @@ function ContactPage() {
 
           <button
             type="submit"
-            className="mt-8 inline-flex h-12 items-center gap-2 bg-accent px-7 text-sm font-semibold uppercase tracking-wider text-accent-foreground hover:-translate-y-0.5"
+            disabled={status === "submitting"}
+            className="mt-8 inline-flex h-12 items-center gap-2 bg-accent px-7 text-sm font-semibold uppercase tracking-wider text-accent-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
           >
-            {sent ? <><Check size={16} /> Opened in your mail app</> : <>Send request <Send size={16} /></>}
+            {status === "submitting" ? (
+              <><Loader2 size={16} className="animate-spin" /> Sending…</>
+            ) : (
+              <>Send request <Send size={16} /></>
+            )}
           </button>
-          {sent && (
-            <p className="mt-3 text-xs text-muted-foreground">
-              Your default mail app should have opened with the message prefilled. If not, email{" "}
+          {status === "error" && (
+            <p className="mt-3 text-xs text-destructive">
+              {errorMsg ?? "Something went wrong."} Please try again or email{" "}
               <a href={`mailto:${site.email}`} className="text-accent">{site.email}</a> directly.
             </p>
           )}
         </form>
+        )}
 
         {/* INFO */}
         <aside className="space-y-6">
