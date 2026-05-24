@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { site, services } from "@/lib/site";
+import logo from "@/assets/logo.jpeg";
 
 export function SiteFooter() {
   return (
@@ -8,7 +9,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-7 w-7 bg-accent" aria-hidden />
+            <img src={logo} alt="YRVAAN GeoSystems logo" className="h-9 w-9 object-contain" />
             <span className="font-display text-xl font-extrabold tracking-tight">
               YRVAAN<span className="text-accent">.</span> GeoSystems
             </span>
