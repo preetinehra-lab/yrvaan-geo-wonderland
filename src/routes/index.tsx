@@ -6,9 +6,9 @@ import { services } from "@/lib/site";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "YRVAAN GeoSystems — Earth Retention & Substructure Specialists" },
+      { title: "Earth Retention & Substructure Contractors | YRVAAN" },
       { name: "description", content: "Specialist contractors for soldier pile walls, diaphragm walls, shotcreting, and engineered retention systems. Request a quote today." },
-      { property: "og:title", content: "YRVAAN GeoSystems — Earth Retention Specialists" },
+      { property: "og:title", content: "Earth Retention & Substructure Contractors | YRVAAN" },
       { property: "og:description", content: "Soldier pile, D-wall, shotcreting, and retention systems engineered for India's most demanding excavations." },
       { property: "og:url", content: "/" },
     ],
