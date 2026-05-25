@@ -16,13 +16,29 @@ const images: Record<string, string> = {
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Soldier Pile, D-Wall, Shotcrete & Retention | YRVAAN" },
+      { title: "Services — Soldier Pile, D-Wall & Shotcrete | YRVAAN" },
       { name: "description", content: "Specialist services from YRVAAN GeoSystems: soldier pile walls, diaphragm walls, shotcreting works, and engineered retention systems." },
       { property: "og:title", content: "Services — YRVAAN GeoSystems" },
       { property: "og:description", content: "Soldier pile, D-wall, shotcreting and retention systems — engineered and executed by YRVAAN GeoSystems." },
       { property: "og:url", content: "/services" },
     ],
     links: [{ rel: "canonical", href: "/services" }],
+    scripts: services.map((s) => ({
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: s.title,
+        description: s.long,
+        serviceType: s.title,
+        areaServed: "India",
+        provider: {
+          "@type": "Organization",
+          name: "YRVAAN GeoSystems Pvt Ltd",
+          url: "https://yrvaangeo.com",
+        },
+      }),
+    })),
   }),
   component: ServicesPage,
 });

@@ -13,6 +13,25 @@ export const Route = createFileRoute("/contact")({
       { property: "og:url", content: "/contact" },
     ],
     links: [{ rel: "canonical", href: "/contact" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SpecialtyContractor",
+          name: site.legal,
+          url: site.url,
+          email: site.email,
+          telephone: site.phone,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: site.address,
+            addressCountry: "IN",
+          },
+          openingHours: "Mo-Sa 09:00-18:00",
+        }),
+      },
+    ],
   }),
   component: ContactPage,
 });
@@ -101,16 +120,17 @@ function ContactPage() {
           <p className="mt-1 text-sm text-muted-foreground">All fields marked * are required.</p>
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            <Field label="Full name *" name="name" required />
-            <Field label="Company" name="company" />
-            <Field label="Email *" name="email" type="email" required />
-            <Field label="Phone *" name="phone" type="tel" required />
-            <Field label="Project location" name="location" placeholder="City / state" />
+            <Field label="Full name *" name="name" id="contact-name" required />
+            <Field label="Company" name="company" id="contact-company" />
+            <Field label="Email *" name="email" id="contact-email" type="email" required />
+            <Field label="Phone *" name="phone" id="contact-phone" type="tel" required />
+            <Field label="Project location" name="location" id="contact-location" placeholder="City / state" />
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-primary">
+              <label htmlFor="contact-service" className="block text-xs font-semibold uppercase tracking-wider text-primary">
                 Service required
               </label>
               <select
+                id="contact-service"
                 name="service"
                 className="mt-2 h-11 w-full border border-input bg-background px-3 text-sm focus:border-accent focus:outline-none"
                 defaultValue=""
@@ -125,10 +145,11 @@ function ContactPage() {
           </div>
 
           <div className="mt-5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-primary">
+            <label htmlFor="contact-message" className="block text-xs font-semibold uppercase tracking-wider text-primary">
               Project brief *
             </label>
             <textarea
+              id="contact-message"
               name="message"
               required
               rows={5}
@@ -183,12 +204,13 @@ function ContactPage() {
 }
 
 function Field({
-  label, name, type = "text", required, placeholder,
-}: { label: string; name: string; type?: string; required?: boolean; placeholder?: string }) {
+  label, name, id, type = "text", required, placeholder,
+}: { label: string; name: string; id: string; type?: string; required?: boolean; placeholder?: string }) {
   return (
     <div>
-      <label className="block text-xs font-semibold uppercase tracking-wider text-primary">{label}</label>
+      <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-wider text-primary">{label}</label>
       <input
+        id={id}
         name={name}
         type={type}
         required={required}
